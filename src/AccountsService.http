@@ -1,0 +1,17 @@
+@AccountsService_HostAddress = http://localhost:5029
+
+POST {{AccountsService_HostAddress}}/account?name=TestUse&password=pass
+Accept: application/json
+###
+
+Get {{AccountsService_HostAddress}}/account?name=TestUse&password=pass
+Accept: application/json
+###
+
+POST {{AccountsService_HostAddress}}/account/credit/<replace with Guid>/50
+Accept: application/json
+###
+
+POST {{AccountsService_HostAddress}}/account/debit?id=<replace with Guid>&amount=10
+Accept: application/json
+###
