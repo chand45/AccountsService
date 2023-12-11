@@ -32,6 +32,15 @@ namespace AccountsService.Controllers
         {
             var account = await repo.Get(accountId);
             account.Balance += amount;
+
+            account.Transactions.Add(new Transaction
+            {
+                Amount = amount,
+                Date = DateTime.Now,
+                Type = "credit",
+                Balance = account.Balance
+            });
+
             return await repo.Update(account);
         }
 
@@ -41,7 +50,55 @@ namespace AccountsService.Controllers
         {
             var account = await repo.Get(id);
             account.Balance -= amount;
+
+            account.Transactions.Add(new Transaction
+            {
+                Amount = amount,
+                Date = DateTime.Now,
+                Type = "debit",
+                Balance = account.Balance
+            });
+
             return await repo.Update(account);
+        }
+
+        [HttpGet]
+        [Route("printPassBook")]
+        public async Task<string> PrintPassBook(string id, string target)
+        {
+            var account = await repo.Get(id);
+
+            if (target == "passbook")
+            {
+                var header = string.Format("{0,-20} | {1,-10} | {2,-10} | {3,-10}\n", "Date", "Type", "Amount", "Balance");
+                string passbook = @"" + header + @"";
+                foreach (var item in account.Transactions)
+                {
+                    passbook += string.Format("{0,-20} | {1,-10} | {2,-10} | {3,-10}\n", item.Date, item.Type, item.Amount, item.Balance);
+                }
+                return passbook;
+            }
+            else if (target == "statement")
+            {
+
+                var header = string.Format("{0,-20} | {1,-10} | {2,-10} | {3,-10}\n", "Date", "Type", "Amount", "Balance");
+                string statement = @"Aurora Bank
+Statement of Accounts
+Account Number: " + account.id + @"
+Account Name: " + account.Name + @"
+Balance: " + account.Balance + @"
+Opening Date: " + account.OpeningDate + @"
+
+" + header + @"
+";
+                foreach (var item in account.Transactions)
+                {
+                    statement += string.Format("{0,-20} | {1,-10} | {2,-10} | {3,-10}\n", item.Date, item.Type, item.Amount, item.Balance);
+                }
+                return statement;
+            }
+
+            return null;
         }
     }
 }

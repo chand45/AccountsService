@@ -60,7 +60,9 @@ namespace AccountsService.Repository
                 Name = name,
                 Password = password,
                 id = Guid.NewGuid(),
-                Balance = 0.0
+                Balance = 0.0,
+                OpeningDate = DateTime.Now,
+                Transactions = new List<Transaction>()
             };
 
             return await container.CreateItemAsync(

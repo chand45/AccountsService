@@ -1,17 +1,25 @@
 @AccountsService_HostAddress = http://localhost:5029
 
-POST {{AccountsService_HostAddress}}/account?name=TestUse&password=pass
+POST {{AccountsService_HostAddress}}/account?name=TestUser&password=pass
 Accept: application/json
 ###
 
-Get {{AccountsService_HostAddress}}/account?name=TestUse&password=pass
+Get {{AccountsService_HostAddress}}/account?name=TestUser&password=pass
 Accept: application/json
 ###
 
-POST {{AccountsService_HostAddress}}/account/credit/<replace with Guid>/50
+POST {{AccountsService_HostAddress}}/account/credit/<Replace with account id>/50
 Accept: application/json
 ###
 
-POST {{AccountsService_HostAddress}}/account/debit?id=<replace with Guid>&amount=10
+POST {{AccountsService_HostAddress}}/account/debit?id=<Replace with account id>&amount=10
 Accept: application/json
+###
+
+GET {{AccountsService_HostAddress}}/account/printPassBook?id=<Replace with account id>&target=passbook
+Accept: text/plain
+###
+
+GET {{AccountsService_HostAddress}}/account/printPassBook?id=<Replace with account id>&target=statement
+Accept: text/plain
 ###
