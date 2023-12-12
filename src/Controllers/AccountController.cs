@@ -33,13 +33,11 @@ namespace AccountsService.Controllers
             var account = await repo.Get(accountId);
             account.Balance += amount;
 
-            account.Transactions.Add(new Transaction
-            {
-                Amount = amount,
-                Date = DateTime.Now,
-                Type = "credit",
-                Balance = account.Balance
-            });
+            account.Transactions.Add(new TransactionBuilder()
+                .BuildWithAmount(amount)
+                .BuildWithType("credit")
+                .BuildWithBalance(account.Balance)
+                .Build());
 
             return await repo.Update(account);
         }
@@ -51,13 +49,11 @@ namespace AccountsService.Controllers
             var account = await repo.Get(id);
             account.Balance -= amount;
 
-            account.Transactions.Add(new Transaction
-            {
-                Amount = amount,
-                Date = DateTime.Now,
-                Type = "debit",
-                Balance = account.Balance
-            });
+            account.Transactions.Add(new TransactionBuilder()
+                .BuildWithAmount(amount)
+                .BuildWithType("debit")
+                .BuildWithBalance(account.Balance)
+                .Build());
 
             return await repo.Update(account);
         }
